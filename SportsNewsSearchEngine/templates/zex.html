@@ -1,0 +1,116 @@
+<!DOCTYPE html> <!-- html的注释 -->
+<html>
+<head>
+	<meta charset = "utf-9">
+	<title>我的第一个网页
+	</title>
+	<style type="text/css">
+        ul.toolbar{
+            position: -webkit-sticky;
+            position: sticky;
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            border: 0px;
+            background-color: #000000;
+        }
+        ul.toolbar>li>a{
+            float:left;
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
+	</style>
+</head>
+<body>   <!--颜色表:http://www.w3school.com.cn/html/html_colors.asp-->
+    <ul class = "toolbar">
+        {%for Item in toolbar%}
+        <li><a href={{Item.url}}>{{Item.name}}</a></li>
+        {%endfor%}
+    </ul>
+	<div style="padding:20px;">
+		<h1 style="text-align:center;">欢迎来到我的第一个网页！</h1>
+	</div> <br> 
+	<div id = "picture" style="height: 400px; width: 450px;text-align: center; float:left">
+		<h2 style="color: blue"> My pic </h2>
+		{% load static %} 
+		<img src="{% static "zex.jpg" %}" width="211" height="282" alt="a photo of zex" usemap="#zexmap">
+		<map name="zexmap">
+			<area shape="rect" coords="0,0,211,282" alt="github" href="https://github.com/choumartin1234">
+		</map>
+		<p><b>(点击图片可进入我的github)</b></p>
+	</div>
+
+	<div id = "content" style = "height:200px; width:400px; float:left;">
+	<h2 style="color: blue"> About Me </h2>
+	<table>
+		<thead>
+		</thead>
+		<tbody>
+			<tr>
+				<td>
+					<b>姓名 &nbsp; &nbsp;</b> <!--&nbsp为空格的意思-->
+				</td>
+				<td>
+					周恩贤
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<b>班级&nbsp;&nbsp;</b>
+				</td>
+				<td>
+					计86
+				</td>
+			</tr>		
+			<tr>
+				<td>
+					<b>学号&nbsp;&nbsp;</b>
+				</td>
+				<td>
+					2018011438
+				</td>
+			</tr>		
+		</tbody>
+	</table>
+	<br>
+	<h2 style="color: blue"> Contact Me </h2>
+<table>
+		<thead>
+		</thead>
+		<tbody>
+			<tr>
+				<td>
+					<b>Phone &nbsp;&nbsp;</b>
+				</td>
+				<td>
+					15652310220
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<b>Email&nbsp;&nbsp;</b>
+				</td>
+				<td>
+					zex18@mails.tsinghua.edu.cn
+				</td>
+			</tr>		
+			<tr>
+				<td>
+					<b>Wechat&nbsp;&nbsp;</b>
+				</td>
+				<td>
+					choumartin12345
+				</td>
+			</tr>			
+		</tbody>
+	</table>
+	<br>
+</div>
+
+</body>
+</html>

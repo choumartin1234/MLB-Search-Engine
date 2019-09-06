@@ -1,0 +1,142 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>
+        MLB新聞搜索引擎
+    </title>
+    <style type="text/css">
+        ul.toolbar{
+            position: -webkit-sticky;
+            position: sticky;
+            top:0;
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            border: 0px;
+            background-color: #000000;
+        }
+        ul.toolbar>li>a{
+            float:left;
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+        html{
+            height: 100%;
+            width:100%;
+            overflow-y:auto;
+        }
+        body{
+            height: 100%;
+            font: 12px arial;
+            background: #fff;
+            margin: 0;
+            padding: 0;
+        }
+        #wrapper{
+            height: 100%;
+            width:100%;
+        }
+        #main{
+            width:40%;
+            margin: 0 auto;
+            overflow: hidden;
+            top: 25%;
+            text-align: center;
+            position: relative;
+        }
+        form{
+            margin: 0 auto;
+            width: 100%;
+            position: relative;
+        }
+        input, button{
+            border: none;
+            outline: none;
+        }
+        input{
+            width: 100%;
+            height: 42px;
+            padding-left: 13px;
+            padding-right: 46px;
+        }
+        button{
+            height: 46px;
+            width: 46px;
+            cursor: pointer;
+            position: absolute;
+        }
+        #footnote-wrapper{
+            height: 50px;
+            position: absolute;
+            bottom: 47px;
+            width:100%;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+        #footnote{
+            display: inline-block;
+            width:100%;
+            text-align: center;
+            line-height: 22px;
+            position: relative;
+            top:-2px;
+            color: #999;
+        }
+        .search-bar {
+            background: #A3D0C3;
+            text-align: right;
+        }
+        .search-bar input {
+            border: 4px solid #7BA7AB;
+            background: #FFFFFF;
+            color: #000;
+        }
+        .search-bar button {
+            top: 2px;
+            right: 0;
+            background: #7BA7AB;
+        }
+        .search-bar button:before {
+            content: "\f002";
+            font-size: 20px;
+            color: #F9F0DA;
+        }
+        .search-bar button:active{
+            background: #6A969A;
+            color:#E8E0CB;
+        }
+    </style>
+</head>
+<body>
+    <ul class="toolbar">
+        {%for Item in toolbar%}
+        <li><a href={{Item.url}}>{{Item.name}}</a></li>
+        {%endfor%}
+    </ul>
+    <div id="wrapper" style="display: block;">
+        <div id="main">
+            <div id="logo">
+                <img hidefocus="true" class="logo-src" src='{% static "Mlb.jpg" %}' width="172" height="129"/>
+            </div>
+            <form class="search-bar">
+                <input type="text" value="" id="input_text" name="input_text" maxlength="255" autocomplete="on" placeholder="搜一下" />
+                <button type="submit">
+                </button>
+            </form>
+        </div>
+        <div id="footnote-wrapper">
+            <div id="footnote">
+                <p class="text" id = "author">
+                    作者：清華大學      計86周恩賢
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

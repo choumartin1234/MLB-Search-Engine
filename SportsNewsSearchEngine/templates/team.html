@@ -1,0 +1,197 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>
+        {{web_title}}
+    </title>
+    <style type="text/css">
+        body{
+            width: 100%;
+            display: block;
+            margin: 0 auto;
+			min-width:1000px;
+        }
+      ul.toolbar{
+            position: -webkit-sticky;
+            position: sticky;
+            top:0;
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            border: 0px;
+            background-color: #000000;
+        }
+        ul.toolbar>li>a{
+            float:left;
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+        .title-bar{
+            display: block;
+            margin: 0 auto;
+            padding-left: 20%;
+            padding-right: 20%;
+            overflow: hidden;
+            text-align: left;
+			margin-top:50px;
+			margin-bottom:50px;
+        }
+        .title{
+            font:bold 190% "標楷體";
+            text-align:left;
+			margin-bottom:20px;
+        }
+        .time{
+            font:bold 130% "標楷體";
+        }
+        .players{
+            float:left;
+			padding-left:20%;
+			padding-right:10%;
+            position: relative;
+            display: inline-block;
+			margin-bottom:50px;
+            overflow: hidden;
+            display: block;
+        }
+        .content{
+            display: block;
+            width: 60%;
+            margin-left: 20%;
+            margin-right:20%;
+            margin-top:50px;
+            margin-bottom: 50px;
+        }
+        .news-box{
+            display: block;
+            padding-top: 10px;
+            padding-bottom:10px;
+            min-height: 100px;
+            overflow: hidden;
+        }
+        .related-news{
+            margin-left:20%;
+            margin-right:20%;
+            float: right
+            width:40%;
+        }
+        .news-box>a{
+            font-size:20px;
+        }
+        .news-summary{
+            font-size:18px;
+        }
+        .page-rank{
+            list-style-type:none;
+            overflow:hidden;
+            border:0px;
+        }
+        .page-rank>li{
+            float:left;
+        }
+        .page-rank>li>a{
+            display: block;
+            text-align: center;
+            line-height: 40px;
+            height: 40px;
+            width: 40px;
+            text-decoration:none;
+            color:#000;
+            border-style: solid;
+            border-width: 1px;
+            border-color:#999;
+            font-size:20px;
+            float:left;
+            margin-left:10px;
+            margin-right:10px;
+        }
+    </style>
+</head>
+
+<body>
+    <ul class="toolbar">
+        {%for Item in toolbar%}
+        <li><a href={{Item.url}}>{{Item.name}}</a></li>
+        {%endfor%}
+    </ul>
+    <div class="title-bar">
+        <div class="title">
+            {{team.name}}
+        </div>
+        <div class="time">
+            加入時間：{{team.time}} </br>
+            所在位置：{{team.place}}
+        </div>
+    </div>
+    <div class="body">
+        <div class = "content">
+            {{team.content}}
+        </div>
+    </div>
+        <div class = "body2">
+            <div class="players">
+                <h2>投手(P)</h2>
+                {%for Item in team.P%}
+                <p>
+                    {{Item}}
+                </p>
+                {% endfor %}
+                <h2>捕手(C)</h2>
+                {%for Item in team.C%}
+                <p>
+                    {{Item}}
+                </p>
+                {% endfor %}
+                <h2>內野手(IF)</h2>
+                {%for Item in team.IF%}
+                <p>
+                    {{Item}}
+                </p>
+                {% endfor %}      
+                <h2>外野手(OF)</h2>
+                {%for Item in team.OF%}
+                <p>
+                    {{Item}}
+                </p>
+                {% endfor %}
+                {% if team.DH %}
+                    <h2>指定打擊(DH)</h2>
+                    {%for Item in team.DH%}
+                    <p>
+                        {{Item}}
+                    </p>                                 
+                    {%endfor%}
+                {% endif %}
+            </div>
+            <div class = "related-news">
+                <h2>相關新聞</h2> 
+                <div class="news-boxes">
+                    {%for new in news%}
+                    <div class="news-box">
+                        <a href={{new.link}} id = "content">
+                            {{new.title | safe}}   
+                        </a>
+                        <div class="news-summary" >
+                            <p>  </p>
+                            <p id = "content">{{new.date }} - {{new.content | safe}} </p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    <ul class="page-rank">
+        {%for page_num in page_total%}
+        <li>
+            <a href={{page_num.url}}> {{page_num.name}} </a>
+        </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

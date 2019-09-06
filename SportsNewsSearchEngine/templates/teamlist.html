@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>
+		{{web_title}}
+	</title>
+	<style type="text/css">
+        ul.toolbar{
+            position: -webkit-sticky;
+            position: sticky;
+            top:0;
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            border: 0px;
+            background-color: #000000;
+        }
+        ul.toolbar>li>a{
+            float:left;
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+        </style>
+</head>
+<body>
+	<ul class="toolbar">
+        {%for Item in toolbar%}
+        <li><a href={{Item.url}}>{{Item.name}}</a></li>
+        {%endfor%}
+    </ul>
+    <h1>MLB Teams(點擊超連結以查看球隊介紹)</h1>
+	{%for team in teams%}
+		<a href = {{team.link}}> {{team.name}}</a>>
+	{% endfor %}
+</body>
+</html>

@@ -1,0 +1,188 @@
+{% load static %}
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html>
+<head>
+	<title>
+		{{web_title}}
+	</title>
+	<style type="text/css">
+		body{
+            width:100%;
+            display: block;
+            margin: 0 auto;
+            min-width: 1000px;
+        }     
+        form{
+            margin: 0 auto;
+            width: 100%;
+            position: relative;
+        }
+        input, button{
+            border: none;
+            outline: none;
+        }
+        input{
+            width: 100%;
+            height: 42px;
+            padding-left: 13px;
+            padding-right: 46px;
+        }
+        button{
+            height: 46px;
+            width: 46px;
+            cursor: pointer;
+            position: absolute;
+        }
+        .search-bar {
+            background: #A3D0C3;
+            text-align: right;
+        }
+        .search-bar input {
+            border: 4px solid #7BA7AB;
+            background: #FFFFFF;
+            color: #000;
+        }
+        .search-bar button {
+            top: 2px;
+            right: 0;
+            background: #7BA7AB;
+        }
+        .search-bar button:before {
+            content: "\f002";
+            font-size: 20px;
+            color: #F9F0DA;
+        }
+        .search-bar button:active{
+            background: #6A969A;
+            color:#E8E0CB;
+        }
+        ul.toolbar{
+            position: -webkit-sticky;
+            position: sticky;
+            top:0;
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            border: 0px;
+            background-color: #000000;
+        }
+        ul.toolbar>li>a{
+            float:left;
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+        .result-data{
+            background-color:#eee;
+            padding-left: 20%;
+            padding-right: 20%;
+            height:40px;
+            color:#999;
+            line-height: 40px;
+        }
+        .main{
+            display: block;
+            width: 60%;
+            margin-left: 20%;
+            margin-right:20%;
+            margin-top:50px;
+            margin-bottom: 50px;
+        }
+        #main2{
+            width:40%;
+            margin: 0 auto;
+            overflow: hidden;
+            top: 25%;
+            text-align: center;
+            position: relative;
+        }
+        .news-box{
+            display: block;
+            padding-top: 10px;
+            padding-bottom:10px;
+            min-height: 100px;
+            overflow: hidden;
+        }
+        .news-box>a{
+            font-size:20px;
+        }
+        .news-summary{
+            font-size:18px;
+        }
+        .page-rank{
+            list-style-type:none;
+            overflow:hidden;
+            border:0px;
+        }
+        .page-rank>li{
+            float:left;
+        }
+        .page-rank>li>a{
+            display: block;
+            text-align: center;
+            line-height: 40px;
+            height: 40px;
+            width: 40px;
+            text-decoration:none;
+            color:#000;
+            border-style: solid;
+            border-width: 1px;
+            border-color:#999;
+            font-size:20px;
+            float:left;
+            margin-left:10px;
+            margin-right:10px;
+        }
+        .highlight {
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+	<ul class="toolbar">
+        {%for Item in toolbar%}
+        <li><a href={{Item.url}}>{{Item.name}}</a></li>
+        {%endfor%}
+    </ul>
+        <div id="main2">
+            <div id="logo">
+                <img hidefocus="true" class="logo-src" src= width="172" height="129"/>
+            </div>
+            <form class="search-bar">
+                <input type="text" value="" id="input_text" name="input_text" maxlength="255" autocomplete="on" placeholder={{text}} />
+                <button type="submit">
+                </button>
+            </form>
+        </div>
+    <div class="result-data">
+    	已為您搜出{{search_count}}則相關新聞，總共耗時{{search_time}}秒。
+    </div>
+    <div class="main">
+    	<div class="news-boxes">
+    		{%for new in news%}
+    		<div class="news-box">
+    			<a href={{new.link}} id = "content">
+                    {{new.title | safe}}   
+                </a>
+    			<div class="news-summary" >
+                    <p>  </p>
+    				<p id = "content">{{new.date }} - {{new.content | safe}} </p>
+    			</div>
+    		</div>
+    		{% endfor %}
+    	</div>
+    	<ul class="page-rank">
+			{%for page_num in page_total%}
+			<li>
+				<a href={{page_num.url}}> {{page_num.name}} </a>
+			</li>
+			{% endfor %}
+    	</ul>
+    </div>
+</body>
+</html>

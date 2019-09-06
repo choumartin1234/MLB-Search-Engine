@@ -1,0 +1,86 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>
+        {{web_title}}
+    </title>
+    <style type="text/css">
+        body{
+            width: 100%;
+            display: block;
+            margin: 0 auto;
+			min-width:1000px;
+        }
+      ul.toolbar{
+            position: -webkit-sticky;
+            position: sticky;
+            top:0;
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            border: 0px;
+            background-color: #000000;
+        }
+        ul.toolbar>li>a{
+            float:left;
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+        .title-bar{
+            display: block;
+            margin: 0 auto;
+            padding-left: 20%;
+            padding-right: 20%;
+            overflow: hidden;
+            text-align: left;
+			margin-top:50px;
+			margin-bottom:50px;
+        }
+        .title{
+            font:bold 190% "標楷體";
+            text-align:left;
+			margin-bottom:20px;
+        }
+        .date{
+            font:bold 130% "標楷體";
+        }
+        .context{
+			padding-left:20%;
+			padding-right:10%;
+            position: relative;
+            display: inline-block;
+			margin-bottom:50px;
+        }
+
+    </style>
+</head>
+
+<body>
+    <ul class="toolbar">
+        {%for Item in toolbar%}
+        <li><a href={{Item.url}}>{{Item.name}}</a></li>
+        {%endfor%}
+    </ul>
+    <div class="title-bar">
+        <div class="title">
+            {{title}}
+        </div>
+        <div class="date">
+            日期：{{date}}
+        </div>
+    </div>
+    <div class="body">
+        <div class="context">
+            <p>
+                {{text | safe}}
+            </p>
+        </div>
+    </div>     
+</body>
+</html>
