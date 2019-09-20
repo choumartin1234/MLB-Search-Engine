@@ -6,11 +6,12 @@ import json
 import jieba
 import time
 class News:
-    def __init__(self,title, date, content, link):
+    def __init__(self,title, date, content, link,tfidf = 0):
         self.title = title
         self.date = date
         self.content = content
         self.link = link
+        self.tfidf = tfidf
 class Team:
     def __init__(self, name, time, place,content, P,C,IF,OF,DH,link,num=0):
         self.name = name
@@ -40,7 +41,7 @@ Newslist = []
 n = 0
 PATH = '../getNews/getNews/data.json'
 NEWS = open(PATH,'r', encoding='utf_8').readlines()
-for i in range(0,len(NEWS)):
+for i in range(0,20000):
     temp = json.loads(NEWS[i])
     new = News(temp['title'],temp['date'],temp['content'],"/news/"+str(i))
     Newslist.append(new)
@@ -54,11 +55,61 @@ jieba.load_userdict('mlbdict.txt')
 InvertedIndexMap = defaultdict(set)
 for i in range(0,len(Newslist)):
     tit = Newslist[i].title
-    twords = jieba.cut_for_search(filterpunc(tit))
+    content = Newslist[i].content
+    twords = jieba.lcut(filterpunc(tit))
     for word in twords:
         InvertedIndexMap[word].add(i)
+    for team in Teamlist:
+        if content.find(team.name) != -1:
+            InvertedIndexMap[team.name].add(i)
 
+#tf-idf值
+cnt = 0
+tfidf = []
+dic = {}
+f = open('tfidf.txt','r',encoding = 'utf-8')
+Lines = f.readlines()
+for i in range(0,len(Lines)):
+    if Lines[i].find('----') != -1:
+        tfidf.append(dic)
+        cnt += 1
+        dic = {}
+    else:
+        words = Lines[i].split(',')
+        words[1] = words[1].replace('\n',"")
+        dic[words[0]] = float(words[1])
+f2 = open('tfidf2.txt','r',encoding = 'utf-8')
+Lines = f2.readlines()
+for i in range(0,len(Lines)):
+    if Lines[i].find('----') != -1:
+        tfidf.append(dic)
+        cnt += 1
+        dic = {}
+    else:
+        words = Lines[i].split(',')
+        words[1] = words[1].replace('\n',"")
+        dic[words[0]] = float(words[1])
+f3 = open('tfidf3.txt','r',encoding = 'utf-8')
+Lines = f3.readlines()
+for i in range(0,len(Lines)):
+    if Lines[i].find('----') != -1:
+        tfidf.append(dic)
+        cnt += 1
+        dic = {}
+    else:
+        words = Lines[i].split(',')
+        words[1] = words[1].replace('\n',"")
+        dic[words[0]] = float(words[1])
 
+for i in range(0,len(Lines)):
+    if Lines[i].find('----') != -1:
+        tfidf.append(dic)
+        cnt += 1
+        dic = {}
+    else:
+        words = Lines[i].split(',')
+        words[1] = words[1].replace('\n',"")
+        dic[words[0]] = float(words[1])
 class Item:
     def __init__(self,url,name):
         self.url = url
@@ -91,7 +142,7 @@ def rank(request):
     sorted_team = []
     for (i,j) in related_num:
         sorted_team.append(Teamlist[j])
-        print(i,j,Teamlist[j].name)
+        #print(i,j,Teamlist[j].name)
     dic = {
         'toolbar': tlist,
         'web_title':  "熱搜排行榜",
@@ -101,39 +152,47 @@ def rank(request):
 
 
 def search(request):
+    if request.POST.get('status') == "T":
+        startscrape()
+    elif request.POST.get('status') == 'F':
+        endscrape()
     text = str(request.GET.get('input_text'))
     if 'page_num' in request.GET:
         page_num = int(request.GET.get('page_num'))
     else:
         page_num = 1
+
+    words = jieba.lcut_for_search(text)
+    ls = []
     start = time.time()
-    words = jieba.cut_for_search(text)
-    wordlist = []
-    lst = set()
-    for word in words:
-        #print(word)
-        wordlist.append(word)
-        for index in InvertedIndexMap[word]:
-            lst.add(index)
+    for i in range(0,20000):
+        num = 0
+        for word in words:
+            num += tfidf[i].get(word,0)
+        if (num != 0):
+            ls.append((num,i))
+    end = time.time()
+    lst = sorted(ls,reverse=True)
+    #print(lst)
     if len(lst) <= (page_num - 1) * 10:
         return HttpResponse("已無更多搜索結果 !")
     startpos = (page_num - 1) * 10
     endpos = min(10 * page_num, len(lst))
     searchlist = []
-    temp = list(lst)
     for i in range(startpos,endpos):
-        tp = Newslist[temp[i]]
-        searchlist.append(News(tp.title,tp.date,tp.content,tp.link))
+        (n,x) = lst[i]
+        tp = Newslist[x]
+        searchlist.append(News(tp.title,tp.date,tp.content,tp.link,n))
 
     for i in range(0,endpos-startpos):
-        for keyword in wordlist:
+        for keyword in words:
             keyword = str(keyword) #記得python中的string不可變, 要重新附值
             searchlist[i].title = searchlist[i].title.replace(keyword, "<span class = 'highlight'>" + keyword + "</span>")
             searchlist[i].content = searchlist[i].content.replace(keyword, "<span class = 'highlight'>" + keyword + "</span>")
             #print(searchlist[i].title)
-            print(Newslist[i].title)
+            #print(Newslist[i].title)
     page_bef = max(1, page_num - 4)
-    last = len(lst) // 10 + 1
+    last = (len(lst)-1) // 10 + 1
     page_aft = min(last , page_num + 4)
     page_total = []
     if page_bef > 1:
@@ -142,13 +201,11 @@ def search(request):
         page_total.append(Item("/search?input_text={:s}&page_num={:d}".format(text, num), str(num)))
     if page_aft < last:
         page_total.append(Item("/search?input_text={:s}&page_num={:d}".format(text, last), "末頁"))
-    end = time.time()
     dic = {
         'toolbar': tlist,
         'web_title': request.GET['input_text'] + " 搜索结果",
         'search_count': str(len(lst)),
         'search_time': str(end-start),
-        'key_words' : wordlist,
         'news': searchlist,
         'page_total': page_total,
         'text':text,

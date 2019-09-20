@@ -151,7 +151,7 @@
     </ul>
         <div id="main2">
             <div id="logo">
-                <img hidefocus="true" class="logo-src" src= width="172" height="129"/>
+                <img hidefocus="true" class="logo-src" src='{% static "Mlb.jpg" %}' width="172" height="129"/>
             </div>
             <form class="search-bar">
                 <input type="text" value="" id="input_text" name="input_text" maxlength="255" autocomplete="on" placeholder={{text}} />
@@ -171,6 +171,7 @@
                 </a>
     			<div class="news-summary" >
                     <p>  </p>
+                    <h3>匹配程度:{{new.tfidf}}</h3>
     				<p id = "content">{{new.date }} - {{new.content | safe}} </p>
     			</div>
     		</div>
@@ -184,5 +185,14 @@
 			{% endfor %}
     	</ul>
     </div>
+    <!--jquery进行动态爬虫 -->
+    <script type="text/javascript"> 
+        $('start').click(function(){
+                $('#status').val("T");
+            };
+        $('end').click(function(){
+                $('#status').val("F");
+            };
+    </script>>
 </body>
 </html>

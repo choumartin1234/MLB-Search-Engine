@@ -20,9 +20,9 @@ from . import view
 urlpatterns = [
     re_path(r'^$',view.home),
     re_path(r'search/',view.search),
-    re_path(r'zex/',view.zex),
+    re_path(r'zex',view.zex),
     re_path(r'team/\d',view.team),
-    re_path(r'teamlist/', view.teamlist),
-    re_path(r'rank/', view.rank),
+    re_path(r'teamlist', view.teamlist),
+    re_path(r'rank', view.rank),
     re_path(r'news/\d+',view.news),
 ]
